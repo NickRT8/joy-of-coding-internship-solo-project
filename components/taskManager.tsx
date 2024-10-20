@@ -6,6 +6,7 @@ export default function TaskManager() {
   const [tasks, setTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [taskName, setTaskName] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
   const [taskPriority, setTaskPriority] = useState("Top");
   const [taskDeadline, setTaskDeadline] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -13,6 +14,10 @@ export default function TaskManager() {
 
   const handleTaskNameChange = (e) => {
     setTaskName(e.target.value);
+  };
+
+  const handleTaskDescChange = (e) => {
+    setTaskDescription(e.target.value);
   };
 
   const handleTaskPriorityChange = (e) => {
@@ -24,8 +29,12 @@ export default function TaskManager() {
   };
 
   const addTask = () => {
-    if (taskName.trim() === "" || taskDeadline === "") {
-      alert("Please enter a task and select a valid deadline.");
+    if (
+      taskName.trim() === "" ||
+      taskDescription.trim() === "" ||
+      taskDeadline === ""
+    ) {
+      alert("Please enter a task, description and select a valid deadline.");
       return;
     }
 
@@ -40,6 +49,7 @@ export default function TaskManager() {
     const newTask = {
       id: tasks.length + 1,
       task: taskName,
+      description: taskDescription,
       priority: taskPriority,
       deadline: taskDeadline,
       done: false,
@@ -48,6 +58,7 @@ export default function TaskManager() {
     setTasks([...tasks, newTask]);
 
     setTaskName("");
+    setTaskDescription("");
     setTaskPriority("Top");
     setTaskDeadline("");
   };
@@ -55,6 +66,7 @@ export default function TaskManager() {
   const handleEditTask = (id) => {
     const taskToEdit = tasks.find((t) => t.id === id);
     setTaskName(taskToEdit.task);
+    setTaskDescription(taskToEdit.description);
     setTaskPriority(taskToEdit.priority);
     setTaskDeadline(taskToEdit.deadline);
     const updatedTasks = tasks.filter((t) => t.id !== id);
@@ -100,6 +112,13 @@ export default function TaskManager() {
             value={taskName}
             onChange={handleTaskNameChange}
           />
+          <input
+            type="text"
+            className="taskNameInput"
+            placeholder="Enter description..."
+            value={taskDescription}
+            onChange={handleTaskDescChange}
+          />
           <select
             className="taskPrioritySelect"
             value={taskPriority}
@@ -144,6 +163,7 @@ export default function TaskManager() {
             <thead>
               <tr>
                 <th>Task</th>
+                <th>Description</th>
                 <th>Priority</th>
                 <th>Deadline</th>
                 <th>Action</th>
@@ -153,6 +173,7 @@ export default function TaskManager() {
               {filteredTasks.map((t) => (
                 <tr key={t.id}>
                   <td>{t.task}</td>
+                  <td>{t.description}</td>
                   <td>{t.priority}</td>
                   <td>{t.deadline}</td>
                   <td>
@@ -190,6 +211,7 @@ export default function TaskManager() {
             <thead>
               <tr>
                 <th>Task</th>
+                <th>Description</th>
                 <th>Priority</th>
                 <th>Deadline</th>
               </tr>
@@ -198,6 +220,7 @@ export default function TaskManager() {
               {completedTasks.map((ct) => (
                 <tr key={ct.id}>
                   <td>{ct.task}</td>
+                  <td>{ct.description}</td>
                   <td>{ct.priority}</td>
                   <td>{ct.deadline}</td>
                 </tr>
